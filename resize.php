@@ -137,7 +137,6 @@ endif;
 		if (!file_exists($src)) return false;
 			$size = getimagesize($src);	
 		if ($size === false) return false;
-			// imagecreatefrom-функцию.
 			$format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
 			$icfunc = "imagecreatefrom" . $format;
 		if (!function_exists($icfunc)) return false;
@@ -147,7 +146,7 @@ endif;
 		
 		$srcWidth = $size[0]; $srcHeight = $size[1]; // исходный размер 
 		
-		/**** Если задали высоту и шырину ****/
+		/**** Если задали высоту и ширину ****/
 		if(is_numeric($width) && is_numeric($height) && $width > 0 && $height > 0){
 			/** Определяем размеры нового изображения при вписывании его в рамки */ 
 			if($srcWidth  <= $width && $srcHeight <= $height){
@@ -159,7 +158,7 @@ endif;
 				$newSize[1] = $height;
 				$newSize[0] = round($srcWidth * $height / $srcHeight);
 			}
-		/**** Если указали только шырину ****/
+		/**** Если указали только ширину ****/
 		}elseif(is_numeric($width) && $width > 0){
 			/** Определяем размеры нового изображения при сжатии по ширине */
 			if($width >= $srcWidth ){ 
@@ -182,23 +181,27 @@ endif;
 		$src = $icfunc($src);
 		$newImage = imagecreatetruecolor($newSize[0], $newSize[1]);
 		imagecopyresampled($newImage, $src , 0, 0, 0, 0, $newSize[0], $newSize[1], $srcWidth, $srcHeight);
-		$icfunc2  = "image" .$format; // ilove lamda функции
+		$icfunc2  = "image" .$format; // ilove lamda функция
+		//fix 1
+		ob_start();
+		if($format=='jpeg'){ imagejpeg($newImage, null , $quality); 
+			//readfile($dest);	//этот метод работает если никс есть или если быстрый hdd винт
+		}else{	$icfunc2( $newImage, null);	}
 		
-		if($format=='jpeg'){
-				if($dispay==true) header("Content-Type: image/jpeg" );
-				imagejpeg($newImage, $desc, $quality); 
-				if($dispay==true && !Empty($desc))
-					readfile($dest);	
-		}else{
-			if($dispay ==true) 	header("Content-Type: image/" . $format );
-			$icfunc2( $newImage, $dest);
-			if($dispay==true && !Empty($desc)) 
-				readfile($dest);
-
-		}
+		$buffer = ob_get_clean();
 		imagedestroy($src);
 		imagedestroy($newImage);
+		
+		$fp = fopen ($desc,'w');
+		fwrite ($fp, $buffer);
+		fclose ($fp);
+		
+		if($dispay==true && !Empty($desc)){
+			header("Content-Type: image/".$format );
+			echo $buffer;
+		}
 		return true;
+		
 	}
 
 
