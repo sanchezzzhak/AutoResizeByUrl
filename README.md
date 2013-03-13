@@ -18,12 +18,12 @@ location ~ ^/storage/(.*)/(.*)_(.*)\.(jpg|jpeg|gif|png|bmp)$ {
 <br>
 \# Конфиг для апача если используется как бекенд или основной сервер.<br>
 \# Файл сохранить в деректорию рядом с resize.php<br>
-<IfModule mod_rewrite.c><br>
+\<IfModule mod_rewrite.c\><br>
   Options +FollowSymLinks<br>
   RewriteEngine On<br>
   RewriteCond %{REQUEST_FILENAME} !-f<br>
   RewriteRule ^(.*)$ resize.php [L]<br>
-</IfModule><br>
+\<\/IfModule\><br>
 <br>
 \# Как это работает <br>
 \# В теле документа создаем картинку img src="/storage/photo/92/fb/68/14/35/322_92fb68143595f5677cfa6632fb6d29cb.jpg"<br>
