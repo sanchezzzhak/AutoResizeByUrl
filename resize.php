@@ -185,16 +185,18 @@ endif;
 		//fix 1
 		ob_start();
 		if($format=='jpeg'){ imagejpeg($newImage, null , $quality); 
-			//readfile($dest);	//этот метод работает если никс есть или если быстрый hdd винт
+		// readfile($dest);	//этот метод работает если никс есть или если быстрый hdd винт
+		// вот поэтому вверху ob_start();
 		}else{	$icfunc2( $newImage, null);	}
 		
 		$buffer = ob_get_clean();
 		imagedestroy($src);
 		imagedestroy($newImage);
 		
-		$fp = fopen ($desc,'w');
-		fwrite ($fp, $buffer);
-		fclose ($fp);
+		// Если нужно сохранять в файл
+		//$fp = fopen ($desc,'w');
+		//fwrite ($fp, $buffer);
+		//fclose ($fp);
 		
 		if($dispay==true && !Empty($desc)){
 			header("Content-Type: image/".$format );
