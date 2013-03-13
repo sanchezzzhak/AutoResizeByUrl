@@ -23,9 +23,10 @@ location ~ ^/storage/(.*)/(.*)_(.*)\.(jpg|jpeg|gif|png|bmp)$ {
   RewriteEngine On<br>
   RewriteCond %{REQUEST_FILENAME} !-f<br>
   RewriteRule ^(.*)$ resize.php [L]<br>
-\<\/IfModule\><br>
+\</IfModule\><br>
 <br>
-\# Как это работает <br>
+# Как это работает
+<br>
 \# В теле документа создаем картинку img src="/storage/photo/92/fb/68/14/35/322_92fb68143595f5677cfa6632fb6d29cb.jpg"<br>
 \# Где 322_ это сигнал для скрипта что картинка по Ширине[=]Высоте если файла не существует.<br>
 <br>
